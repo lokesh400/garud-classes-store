@@ -1,0 +1,127 @@
+<%- include('../partials/header') %>
+
+<section class="page-header admin-header">
+  <div class="container">
+    <h1><i class="bi bi-speedometer2 me-2"></i>Admin Dashboard</h1>
+  </div>
+</section>
+
+<section class="section-padding">
+  <div class="container">
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-5">
+      <div class="col-6 col-lg-3">
+        <div class="admin-stat-card stat-products">
+          <div class="admin-stat-icon"><i class="bi bi-box-seam-fill"></i></div>
+          <div class="admin-stat-info">
+            <h3><%= totalProducts %></h3>
+            <p>Total Products</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="admin-stat-card stat-orders">
+          <div class="admin-stat-icon"><i class="bi bi-receipt"></i></div>
+          <div class="admin-stat-info">
+            <h3><%= totalOrders %></h3>
+            <p>Total Orders</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="admin-stat-card stat-users">
+          <div class="admin-stat-icon"><i class="bi bi-people-fill"></i></div>
+          <div class="admin-stat-info">
+            <h3><%= totalUsers %></h3>
+            <p>Total Users</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-lg-3">
+        <div class="admin-stat-card stat-revenue">
+          <div class="admin-stat-icon"><i class="bi bi-currency-rupee"></i></div>
+          <div class="admin-stat-info">
+            <h3>&#8377;<%= totalRevenue.toLocaleString('en-IN') %></h3>
+            <p>Revenue</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row g-4 mb-5">
+      <div class="col-md-6 col-lg-3">
+        <a href="/admin/products/add" class="admin-action-card">
+          <i class="bi bi-plus-circle-fill"></i>
+          <span>Add Product</span>
+        </a>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <a href="/admin/products" class="admin-action-card">
+          <i class="bi bi-grid-fill"></i>
+          <span>Manage Products</span>
+        </a>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <a href="/admin/orders" class="admin-action-card">
+          <i class="bi bi-box-seam-fill"></i>
+          <span>Manage Orders</span>
+        </a>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <a href="/" class="admin-action-card">
+          <i class="bi bi-shop"></i>
+          <span>View Store</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Recent Orders -->
+    <div class="admin-table-section">
+      <h4 class="mb-4"><i class="bi bi-clock-history me-2"></i>Recent Orders</h4>
+      <% if (recentOrders.length > 0) { %>
+        <div class="table-responsive">
+          <table class="table admin-table">
+            <thead>
+              <tr>
+                <th>Order ID</th>
+                <th>Customer</th>
+                <th>Amount</th>
+                <th>Payment</th>
+                <th>Status</th>
+                <th>Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% recentOrders.forEach(order => { %>
+                <tr>
+                  <td><code>#<%= order._id.toString().slice(-8).toUpperCase() %></code></td>
+                  <td><%= order.user ? order.user.fullname : 'N/A' %></td>
+                  <td><strong>&#8377;<%= order.totalAmount.toLocaleString('en-IN') %></strong></td>
+                  <td>
+                    <span class="badge bg-<%= order.paymentStatus === 'Paid' ? 'success' : order.paymentStatus === 'Failed' ? 'danger' : 'warning' %>">
+                      <%= order.paymentStatus %>
+                    </span>
+                  </td>
+                  <td>
+                    <span class="badge bg-<%= order.status === 'Delivered' ? 'success' : order.status === 'Cancelled' ? 'danger' : order.status === 'Shipped' ? 'info' : 'warning' %>">
+                      <%= order.status %>
+                    </span>
+                  </td>
+                  <td><%= order.createdAt.toLocaleDateString('en-IN') %></td>
+                </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      <% } else { %>
+        <div class="text-center text-muted py-4">
+          <i class="bi bi-inbox" style="font-size: 2rem;"></i>
+          <p>No orders yet</p>
+        </div>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

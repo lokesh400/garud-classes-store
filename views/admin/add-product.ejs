@@ -1,0 +1,115 @@
+<%- include('../partials/header') %>
+
+<section class="page-header admin-header">
+  <div class="container">
+    <h1><i class="bi bi-plus-circle me-2"></i>Add New Product</h1>
+  </div>
+</section>
+
+<section class="section-padding">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="admin-form-card">
+          <form action="/admin/products/add" method="POST" enctype="multipart/form-data">
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label">Product Name *</label>
+                <input type="text" name="name" class="form-control" placeholder="Enter product name" required>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Short Description</label>
+                <input type="text" name="shortDescription" class="form-control" placeholder="Brief description (max 200 chars)" maxlength="200">
+              </div>
+              <div class="col-12">
+                <label class="form-label">Full Description *</label>
+                <textarea name="description" class="form-control" rows="5" placeholder="Detailed product description" required></textarea>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Category *</label>
+                <select name="category" class="form-select" required>
+                  <option value="">Select Category</option>
+                  <option value="Books">Books</option>
+                  <option value="Study Material">Study Material</option>
+                  <option value="Test Series">Test Series</option>
+                  <option value="Video Courses">Video Courses</option>
+                  <option value="Notes">Notes</option>
+                  <option value="Stationery">Stationery</option>
+                  <option value="Combo Packs">Combo Packs</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Price (&#8377;) *</label>
+                <input type="number" name="price" class="form-control" placeholder="0" min="0" step="0.01" required>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Discount Price (&#8377;)</label>
+                <input type="number" name="discountPrice" class="form-control" placeholder="Leave empty if no discount" min="0" step="0.01">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Subject</label>
+                <input type="text" name="subject" class="form-control" placeholder="e.g., Mathematics">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Class Level</label>
+                <input type="text" name="classLevel" class="form-control" placeholder="e.g., Class 10, UPSC">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Author / Publisher</label>
+                <input type="text" name="author" class="form-control" placeholder="e.g., Garud Classes">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Stock *</label>
+                <input type="number" name="stock" class="form-control" placeholder="0" min="0" required>
+              </div>
+              <div class="col-md-6 d-flex align-items-end">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" name="featured" id="featured">
+                  <label class="form-check-label" for="featured">Featured Product</label>
+                </div>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Product Images (Max 6)</label>
+                <input type="file" name="images" class="form-control" multiple accept="image/*" id="imageInput">
+                <div class="form-text">Upload up to 6 images. Supported: JPG, PNG, GIF, WebP (Max 5MB each)</div>
+                <div id="imagePreview" class="image-preview-grid mt-3"></div>
+              </div>
+              <div class="col-12 mt-4">
+                <button type="submit" class="btn btn-primary btn-lg">
+                  <i class="bi bi-plus-circle me-2"></i>Add Product
+                </button>
+                <a href="/admin/products" class="btn btn-outline-secondary btn-lg ms-2">Cancel</a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.getElementById('imageInput').addEventListener('change', function(e) {
+    const preview = document.getElementById('imagePreview');
+    preview.innerHTML = '';
+    const files = e.target.files;
+    if (files.length > 6) {
+      alert('Maximum 6 images allowed');
+      e.target.value = '';
+      return;
+    }
+    Array.from(files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const div = document.createElement('div');
+        div.className = 'preview-item';
+        div.innerHTML = '<img src="' + event.target.result + '" alt="Preview"><span class="preview-name">' + file.name + '</span>';
+        preview.appendChild(div);
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+</script>
+
+<%- include('../partials/footer') %>

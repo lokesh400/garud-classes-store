@@ -1,0 +1,123 @@
+<%- include('../partials/header') %>
+
+<section class="page-header admin-header">
+  <div class="container">
+    <h1><i class="bi bi-pencil-square me-2"></i>Edit Product</h1>
+  </div>
+</section>
+
+<section class="section-padding">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-10">
+        <div class="admin-form-card">
+          <form action="/admin/products/edit/<%= product._id %>" method="POST" enctype="multipart/form-data">
+            <div class="row g-3">
+              <div class="col-12">
+                <label class="form-label">Product Name *</label>
+                <input type="text" name="name" class="form-control" value="<%= product.name %>" required>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Short Description</label>
+                <input type="text" name="shortDescription" class="form-control" value="<%= product.shortDescription || '' %>" maxlength="200">
+              </div>
+              <div class="col-12">
+                <label class="form-label">Full Description *</label>
+                <textarea name="description" class="form-control" rows="5" required><%= product.description %></textarea>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Category *</label>
+                <select name="category" class="form-select" required>
+                  <option value="">Select Category</option>
+                  <% ['Books', 'Study Material', 'Test Series', 'Video Courses', 'Notes', 'Stationery', 'Combo Packs', 'Other'].forEach(cat => { %>
+                    <option value="<%= cat %>" <%= product.category === cat ? 'selected' : '' %>><%= cat %></option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Price (&#8377;) *</label>
+                <input type="number" name="price" class="form-control" value="<%= product.price %>" min="0" step="0.01" required>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Discount Price (&#8377;)</label>
+                <input type="number" name="discountPrice" class="form-control" value="<%= product.discountPrice || '' %>" min="0" step="0.01">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Subject</label>
+                <input type="text" name="subject" class="form-control" value="<%= product.subject || '' %>">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Class Level</label>
+                <input type="text" name="classLevel" class="form-control" value="<%= product.classLevel || '' %>">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Author / Publisher</label>
+                <input type="text" name="author" class="form-control" value="<%= product.author || '' %>">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Stock *</label>
+                <input type="number" name="stock" class="form-control" value="<%= product.stock %>" min="0" required>
+              </div>
+              <div class="col-md-6 d-flex align-items-end">
+                <div class="form-check form-switch">
+                  <input class="form-check-input" type="checkbox" name="featured" id="featured" <%= product.featured ? 'checked' : '' %>>
+                  <label class="form-check-label" for="featured">Featured Product</label>
+                </div>
+              </div>
+
+              <!-- Existing images -->
+              <% if (product.images && product.images.length > 0) { %>
+                <div class="col-12">
+                  <label class="form-label">Current Images</label>
+                  <div class="existing-images-grid">
+                    <% product.images.forEach((img, index) => { %>
+                      <div class="existing-image-item">
+                        <img src="<%= img %>" alt="Product Image">
+                        <label class="remove-img-label">
+                          <input type="checkbox" name="removeImages" value="<%= img %>">
+                          <span><i class="bi bi-trash"></i> Remove</span>
+                        </label>
+                      </div>
+                    <% }) %>
+                  </div>
+                </div>
+              <% } %>
+
+              <div class="col-12">
+                <label class="form-label">Add More Images</label>
+                <input type="file" name="images" class="form-control" multiple accept="image/*" id="imageInput">
+                <div class="form-text">Upload new images (Max 6 total)</div>
+                <div id="imagePreview" class="image-preview-grid mt-3"></div>
+              </div>
+              <div class="col-12 mt-4">
+                <button type="submit" class="btn btn-primary btn-lg">
+                  <i class="bi bi-check-lg me-2"></i>Update Product
+                </button>
+                <a href="/admin/products" class="btn btn-outline-secondary btn-lg ms-2">Cancel</a>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.getElementById('imageInput').addEventListener('change', function(e) {
+    const preview = document.getElementById('imagePreview');
+    preview.innerHTML = '';
+    Array.from(e.target.files).forEach(file => {
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const div = document.createElement('div');
+        div.className = 'preview-item';
+        div.innerHTML = '<img src="' + event.target.result + '" alt="Preview"><span class="preview-name">' + file.name + '</span>';
+        preview.appendChild(div);
+      };
+      reader.readAsDataURL(file);
+    });
+  });
+</script>
+
+<%- include('../partials/footer') %>

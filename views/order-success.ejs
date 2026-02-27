@@ -1,0 +1,65 @@
+<%- include('partials/header') %>
+
+<section class="section-padding">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="order-success-card text-center">
+          <div class="success-icon">
+            <i class="bi bi-check-circle-fill"></i>
+          </div>
+          <h2>Order Confirmed!</h2>
+          <p class="text-muted">Thank you for your purchase. Your order has been placed successfully.</p>
+          
+          <div class="order-details-box">
+            <div class="row g-3 text-start">
+              <div class="col-md-6">
+                <strong>Order ID:</strong>
+                <p><code>#<%= order._id.toString().slice(-8).toUpperCase() %></code></p>
+              </div>
+              <div class="col-md-6">
+                <strong>Date:</strong>
+                <p><%= order.createdAt.toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }) %></p>
+              </div>
+              <div class="col-md-6">
+                <strong>Total Amount:</strong>
+                <p class="text-primary fw-bold">&#8377;<%= order.totalAmount.toLocaleString('en-IN') %></p>
+              </div>
+              <div class="col-md-6">
+                <strong>Payment Status:</strong>
+                <p><span class="badge bg-success"><%= order.paymentStatus %></span></p>
+              </div>
+            </div>
+          </div>
+
+          <h5 class="mt-4 mb-3">Items Ordered</h5>
+          <div class="order-items-list">
+            <% order.items.forEach(item => { %>
+              <div class="order-item">
+                <div class="order-item-img">
+                  <% if (item.image) { %>
+                    <img src="<%= item.image %>" alt="">
+                  <% } %>
+                </div>
+                <div class="order-item-info">
+                  <strong><%= item.name %></strong>
+                  <span>Qty: <%= item.quantity %> × &#8377;<%= item.price.toLocaleString('en-IN') %></span>
+                </div>
+                <div class="order-item-price">
+                  <strong>&#8377;<%= (item.price * item.quantity).toLocaleString('en-IN') %></strong>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+
+          <div class="mt-4">
+            <a href="/payment/my-orders" class="btn btn-primary me-2"><i class="bi bi-box-seam me-2"></i>View Orders</a>
+            <a href="/products" class="btn btn-outline-primary"><i class="bi bi-shop me-2"></i>Continue Shopping</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

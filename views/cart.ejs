@@ -1,0 +1,92 @@
+<%- include('partials/header') %>
+
+<section class="page-header">
+  <div class="container">
+    <h1><i class="bi bi-cart3 me-2"></i>Shopping Cart</h1>
+  </div>
+</section>
+
+<section class="section-padding">
+  <div class="container">
+    <% if (cart && cart.length > 0) { %>
+      <div class="row g-4">
+        <div class="col-lg-8">
+          <div class="cart-items">
+            <% cart.forEach(item => { %>
+              <div class="cart-item">
+                <div class="cart-item-img">
+                  <% if (item.product.images && item.product.images.length > 0) { %>
+                    <img src="<%= item.product.images[0] %>" alt="<%= item.product.name %>">
+                  <% } else { %>
+                    <div class="cart-img-placeholder"><i class="bi bi-image"></i></div>
+                  <% } %>
+                </div>
+                <div class="cart-item-info">
+                  <h5><a href="/products/<%= item.product._id %>"><%= item.product.name %></a></h5>
+                  <span class="text-muted"><%= item.product.category %></span>
+                  <div class="cart-item-price">
+                    <% const itemPrice = item.product.discountPrice && item.product.discountPrice < item.product.price ? item.product.discountPrice : item.product.price; %>
+                    <strong>&#8377;<%= itemPrice.toLocaleString('en-IN') %></strong>
+                    <% if (item.product.discountPrice && item.product.discountPrice < item.product.price) { %>
+                      <small class="text-muted text-decoration-line-through">&#8377;<%= item.product.price.toLocaleString('en-IN') %></small>
+                    <% } %>
+                  </div>
+                </div>
+                <div class="cart-item-actions">
+                  <form action="/cart/update/<%= item.product._id %>" method="POST" class="qty-form">
+                    <div class="qty-wrapper">
+                      <button type="submit" name="quantity" value="<%= item.quantity - 1 %>" class="qty-btn">-</button>
+                      <span class="qty-display"><%= item.quantity %></span>
+                      <button type="submit" name="quantity" value="<%= item.quantity + 1 %>" class="qty-btn">+</button>
+                    </div>
+                  </form>
+                  <div class="cart-item-total">
+                    <strong>&#8377;<%= (itemPrice * item.quantity).toLocaleString('en-IN') %></strong>
+                  </div>
+                  <form action="/cart/remove/<%= item.product._id %>" method="POST">
+                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                      <i class="bi bi-trash"></i>
+                    </button>
+                  </form>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="cart-summary">
+            <h4>Order Summary</h4>
+            <div class="summary-row">
+              <span>Items (<%= cart.length %>)</span>
+              <span>&#8377;<%= cartTotal.toLocaleString('en-IN') %></span>
+            </div>
+            <div class="summary-row">
+              <span>Shipping</span>
+              <span class="text-success">Free</span>
+            </div>
+            <hr>
+            <div class="summary-row summary-total">
+              <strong>Total</strong>
+              <strong>&#8377;<%= cartTotal.toLocaleString('en-IN') %></strong>
+            </div>
+            <a href="/payment/checkout" class="btn btn-primary btn-lg w-100 mt-3">
+              <i class="bi bi-lock me-2"></i>Proceed to Checkout
+            </a>
+            <a href="/products" class="btn btn-outline-secondary w-100 mt-2">
+              <i class="bi bi-arrow-left me-2"></i>Continue Shopping
+            </a>
+          </div>
+        </div>
+      </div>
+    <% } else { %>
+      <div class="empty-state">
+        <i class="bi bi-cart-x"></i>
+        <h4>Your cart is empty</h4>
+        <p>Looks like you haven't added any products yet</p>
+        <a href="/products" class="btn btn-primary btn-lg">Browse Products</a>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

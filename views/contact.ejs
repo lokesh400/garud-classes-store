@@ -1,0 +1,85 @@
+<%- include('partials/header') %>
+
+<section class="page-header">
+  <div class="container">
+    <h1><i class="bi bi-telephone me-2"></i>Contact Us</h1>
+  </div>
+</section>
+
+<section class="section-padding">
+  <div class="container">
+    <div class="row g-5">
+      <div class="col-lg-5">
+        <div class="contact-info-section">
+          <h3>Get in Touch</h3>
+          <p>Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+          <div class="contact-info-list">
+            <div class="contact-info-item">
+              <div class="contact-icon"><i class="bi bi-geo-alt-fill"></i></div>
+              <div>
+                <h5>Address</h5>
+                <p>Garud Classes, Main Road, City, India</p>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-icon"><i class="bi bi-telephone-fill"></i></div>
+              <div>
+                <h5>Phone</h5>
+                <p>+91 98765 43210</p>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-icon"><i class="bi bi-envelope-fill"></i></div>
+              <div>
+                <h5>Email</h5>
+                <p>info@garudclasses.com</p>
+              </div>
+            </div>
+            <div class="contact-info-item">
+              <div class="contact-icon"><i class="bi bi-clock-fill"></i></div>
+              <div>
+                <h5>Business Hours</h5>
+                <p>Mon - Sat: 9:00 AM - 7:00 PM</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-7">
+        <div class="contact-form-card">
+          <form>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Your Name</label>
+                <input type="text" class="form-control" placeholder="Enter your name" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Email</label>
+                <input type="email" class="form-control" placeholder="Enter your email" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Phone</label>
+                <input type="tel" class="form-control" placeholder="Enter your phone">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Subject</label>
+                <input type="text" class="form-control" placeholder="Enter subject" required>
+              </div>
+              <div class="col-12">
+                <label class="form-label">Message</label>
+                <textarea class="form-control" rows="5" placeholder="Your message..." required></textarea>
+              </div>
+              <div class="col-12">
+                <button type="submit" class="btn btn-primary btn-lg">
+                  <i class="bi bi-send me-2"></i>Send Message
+                </button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

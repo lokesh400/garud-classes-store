@@ -1,0 +1,56 @@
+<div class="product-card">
+  <a href="/products/<%= product._id %>" class="product-card-link">
+    <div class="product-img-wrapper">
+      <% if (product.images && product.images.length > 0) { %>
+        <img src="<%= product.images[0] %>" alt="<%= product.name %>" class="product-img" loading="lazy">
+      <% } else { %>
+        <div class="product-img-placeholder">
+          <i class="bi bi-image"></i>
+        </div>
+      <% } %>
+      <% if (product.discountPrice && product.discountPrice < product.price) { %>
+        <span class="product-badge badge-discount">
+          -<%= Math.round(((product.price - product.discountPrice) / product.price) * 100) %>%
+        </span>
+      <% } %>
+      <% if (product.stock < 1) { %>
+        <span class="product-badge badge-outofstock">Out of Stock</span>
+      <% } %>
+      <% if (product.featured) { %>
+        <span class="product-badge badge-featured"><i class="bi bi-star-fill"></i></span>
+      <% } %>
+    </div>
+    <div class="product-info">
+      <span class="product-category"><%= product.category %></span>
+      <h5 class="product-name"><%= product.name %></h5>
+      <% if (product.subject) { %>
+        <span class="product-subject"><i class="bi bi-book me-1"></i><%= product.subject %></span>
+      <% } %>
+      <div class="product-price">
+        <% if (product.discountPrice && product.discountPrice < product.price) { %>
+          <span class="price-current">&#8377;<%= product.discountPrice.toLocaleString('en-IN') %></span>
+          <span class="price-original">&#8377;<%= product.price.toLocaleString('en-IN') %></span>
+        <% } else { %>
+          <span class="price-current">&#8377;<%= product.price.toLocaleString('en-IN') %></span>
+        <% } %>
+      </div>
+      <div class="product-rating">
+        <% for (let i = 1; i <= 5; i++) { %>
+          <i class="bi bi-star<%= i <= Math.round(product.ratings.average) ? '-fill' : '' %>"></i>
+        <% } %>
+        <span>(<%= product.ratings.count %>)</span>
+      </div>
+    </div>
+  </a>
+  <div class="product-actions">
+    <% if (product.stock > 0) { %>
+      <form action="/cart/add/<%= product._id %>" method="POST" class="d-inline">
+        <button type="submit" class="btn btn-add-cart w-100">
+          <i class="bi bi-cart-plus me-1"></i> Add to Cart
+        </button>
+      </form>
+    <% } else { %>
+      <button class="btn btn-outofstock w-100" disabled>Out of Stock</button>
+    <% } %>
+  </div>
+</div>

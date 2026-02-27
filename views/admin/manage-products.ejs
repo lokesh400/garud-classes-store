@@ -1,0 +1,98 @@
+<%- include('../partials/header') %>
+
+<section class="page-header admin-header">
+  <div class="container">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
+      <h1><i class="bi bi-grid-fill me-2"></i>Manage Products</h1>
+      <a href="/admin/products/add" class="btn btn-primary"><i class="bi bi-plus-lg me-2"></i>Add Product</a>
+    </div>
+  </div>
+</section>
+
+<section class="section-padding">
+  <div class="container">
+    <% if (products.length > 0) { %>
+      <div class="table-responsive">
+        <table class="table admin-table">
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Name</th>
+              <th>Category</th>
+              <th>Price</th>
+              <th>Stock</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% products.forEach(product => { %>
+              <tr>
+                <td>
+                  <% if (product.images && product.images.length > 0) { %>
+                    <img src="<%= product.images[0] %>" alt="" class="admin-product-thumb">
+                  <% } else { %>
+                    <div class="admin-product-thumb-placeholder"><i class="bi bi-image"></i></div>
+                  <% } %>
+                </td>
+                <td>
+                  <strong><%= product.name %></strong>
+                  <% if (product.featured) { %><span class="badge bg-warning ms-1"><i class="bi bi-star-fill"></i></span><% } %>
+                </td>
+                <td><span class="badge bg-secondary"><%= product.category %></span></td>
+                <td>
+                  <% if (product.discountPrice && product.discountPrice < product.price) { %>
+                    <strong>&#8377;<%= product.discountPrice.toLocaleString('en-IN') %></strong>
+                    <small class="text-muted text-decoration-line-through">&#8377;<%= product.price.toLocaleString('en-IN') %></small>
+                  <% } else { %>
+                    <strong>&#8377;<%= product.price.toLocaleString('en-IN') %></strong>
+                  <% } %>
+                </td>
+                <td>
+                  <span class="<%= product.stock > 0 ? 'text-success' : 'text-danger' %>">
+                    <strong><%= product.stock %></strong>
+                  </span>
+                </td>
+                <td>
+                  <span class="badge bg-<%= product.isActive ? 'success' : 'danger' %>">
+                    <%= product.isActive ? 'Active' : 'Inactive' %>
+                  </span>
+                </td>
+                <td>
+                  <div class="admin-actions">
+                    <a href="/products/<%= product._id %>" class="btn btn-sm btn-outline-info" title="View">
+                      <i class="bi bi-eye"></i>
+                    </a>
+                    <a href="/admin/products/edit/<%= product._id %>" class="btn btn-sm btn-outline-primary" title="Edit">
+                      <i class="bi bi-pencil"></i>
+                    </a>
+                    <form action="/admin/products/toggle/<%= product._id %>" method="POST" class="d-inline">
+                      <button type="submit" class="btn btn-sm btn-outline-warning" title="Toggle Status">
+                        <i class="bi bi-<%= product.isActive ? 'eye-slash' : 'eye' %>"></i>
+                      </button>
+                    </form>
+                    <form action="/admin/products/delete/<%= product._id %>" method="POST" class="d-inline" 
+                          onsubmit="return confirm('Are you sure you want to delete this product?')">
+                      <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    <% } else { %>
+      <div class="empty-state">
+        <i class="bi bi-box-seam"></i>
+        <h4>No products yet</h4>
+        <p>Start by adding your first product</p>
+        <a href="/admin/products/add" class="btn btn-primary">Add Product</a>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>

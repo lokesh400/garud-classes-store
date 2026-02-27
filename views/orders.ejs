@@ -1,0 +1,74 @@
+<%- include('partials/header') %>
+
+<section class="page-header">
+  <div class="container">
+    <h1><i class="bi bi-box-seam me-2"></i>My Orders</h1>
+  </div>
+</section>
+
+<section class="section-padding">
+  <div class="container">
+    <% if (orders && orders.length > 0) { %>
+      <div class="orders-list">
+        <% orders.forEach(order => { %>
+          <div class="order-card">
+            <div class="order-card-header">
+              <div class="order-header-info">
+                <span class="order-id">Order #<%= order._id.toString().slice(-8).toUpperCase() %></span>
+                <span class="order-date"><%= order.createdAt.toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' }) %></span>
+              </div>
+              <div class="order-header-badges">
+                <span class="badge bg-<%= order.paymentStatus === 'Paid' ? 'success' : order.paymentStatus === 'Failed' ? 'danger' : 'warning' %>">
+                  <%= order.paymentStatus %>
+                </span>
+                <span class="badge bg-<%= order.status === 'Delivered' ? 'success' : order.status === 'Cancelled' ? 'danger' : order.status === 'Shipped' ? 'info' : 'primary' %>">
+                  <%= order.status %>
+                </span>
+              </div>
+            </div>
+            <div class="order-card-body">
+              <% order.items.forEach(item => { %>
+                <div class="order-item-row">
+                  <div class="order-item-img">
+                    <% if (item.image) { %>
+                      <img src="<%= item.image %>" alt="">
+                    <% } else { %>
+                      <div class="order-img-placeholder"><i class="bi bi-image"></i></div>
+                    <% } %>
+                  </div>
+                  <div class="order-item-details">
+                    <strong><%= item.name %></strong>
+                    <span>Qty: <%= item.quantity %> × &#8377;<%= item.price.toLocaleString('en-IN') %></span>
+                  </div>
+                  <div class="order-item-subtotal">
+                    <strong>&#8377;<%= (item.price * item.quantity).toLocaleString('en-IN') %></strong>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+            <div class="order-card-footer">
+              <div class="order-shipping">
+                <small class="text-muted">
+                  <i class="bi bi-geo-alt me-1"></i>
+                  <%= order.shippingAddress.street %>, <%= order.shippingAddress.city %>, <%= order.shippingAddress.state %> - <%= order.shippingAddress.pincode %>
+                </small>
+              </div>
+              <div class="order-total">
+                <strong>Total: &#8377;<%= order.totalAmount.toLocaleString('en-IN') %></strong>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+    <% } else { %>
+      <div class="empty-state">
+        <i class="bi bi-bag-x"></i>
+        <h4>No orders yet</h4>
+        <p>You haven't placed any orders yet</p>
+        <a href="/products" class="btn btn-primary btn-lg">Start Shopping</a>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

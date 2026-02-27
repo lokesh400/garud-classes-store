@@ -1,0 +1,60 @@
+<%- include('partials/header') %>
+
+<section class="page-header">
+  <div class="container">
+    <h1><i class="bi bi-person-circle me-2"></i>My Profile</h1>
+  </div>
+</section>
+
+<section class="section-padding">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="profile-card">
+          <form action="/auth/profile" method="POST">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label">Full Name</label>
+                <input type="text" name="fullname" class="form-control" value="<%= currentUser.fullname %>" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" value="<%= currentUser.email %>" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Phone</label>
+                <input type="tel" name="phone" class="form-control" value="<%= currentUser.phone || '' %>">
+              </div>
+              <div class="col-md-6">
+                <label class="form-label">Username</label>
+                <input type="text" class="form-control" value="<%= currentUser.username %>" disabled>
+              </div>
+              <div class="col-12"><hr><h5>Address</h5></div>
+              <div class="col-12">
+                <label class="form-label">Street</label>
+                <input type="text" name="street" class="form-control" value="<%= currentUser.address ? currentUser.address.street || '' : '' %>">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">City</label>
+                <input type="text" name="city" class="form-control" value="<%= currentUser.address ? currentUser.address.city || '' : '' %>">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">State</label>
+                <input type="text" name="state" class="form-control" value="<%= currentUser.address ? currentUser.address.state || '' : '' %>">
+              </div>
+              <div class="col-md-4">
+                <label class="form-label">Pincode</label>
+                <input type="text" name="pincode" class="form-control" value="<%= currentUser.address ? currentUser.address.pincode || '' : '' %>">
+              </div>
+              <div class="col-12">
+                <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg me-2"></i>Update Profile</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,65 @@
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="/">
+      <i class="bi bi-mortarboard-fill"></i>
+      <span>Garud Classes</span>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <form class="nav-search-form mx-auto" action="/products" method="GET">
+        <div class="input-group">
+          <input type="text" class="form-control" name="search" placeholder="Search books, courses, materials..." 
+                 value="<%= typeof currentSearch !== 'undefined' ? currentSearch : '' %>">
+          <button class="btn btn-search" type="submit">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+      </form>
+      <ul class="navbar-nav ms-auto align-items-center">
+        <li class="nav-item">
+          <a class="nav-link" href="/"><i class="bi bi-house-fill d-lg-none me-2"></i>Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/products"><i class="bi bi-shop d-lg-none me-2"></i>Products</a>
+        </li>
+        <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+          <li class="nav-item">
+            <a class="nav-link position-relative" href="/cart">
+              <i class="bi bi-cart3"></i>
+              <span class="d-lg-none ms-2">Cart</span>
+              <% if (currentUser.cart && currentUser.cart.length > 0) { %>
+                <span class="badge bg-danger cart-badge"><%= currentUser.cart.length %></span>
+              <% } %>
+            </a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+              <i class="bi bi-person-circle"></i>
+              <span class="d-lg-none ms-2"><%= currentUser.fullname %></span>
+              <span class="d-none d-lg-inline ms-1"><%= currentUser.fullname.split(' ')[0] %></span>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end">
+              <li><a class="dropdown-item" href="/auth/profile"><i class="bi bi-person me-2"></i>My Profile</a></li>
+              <li><a class="dropdown-item" href="/payment/my-orders"><i class="bi bi-box-seam me-2"></i>My Orders</a></li>
+              <% if (currentUser.role === 'admin') { %>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-primary" href="/admin"><i class="bi bi-speedometer2 me-2"></i>Admin Dashboard</a></li>
+              <% } %>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="/auth/logout"><i class="bi bi-box-arrow-right me-2"></i>Logout</a></li>
+            </ul>
+          </li>
+        <% } else { %>
+          <li class="nav-item">
+            <a class="nav-link" href="/auth/login"><i class="bi bi-box-arrow-in-right d-lg-none me-2"></i>Login</a>
+          </li>
+          <li class="nav-item">
+            <a class="btn btn-register ms-2" href="/auth/register">Register</a>
+          </li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+</nav>

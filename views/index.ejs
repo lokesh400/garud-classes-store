@@ -1,0 +1,192 @@
+<%- include('partials/header') %>
+
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="hero-overlay"></div>
+  <div class="container">
+    <div class="row align-items-center min-vh-75">
+      <div class="col-lg-7">
+        <div class="hero-content">
+          <span class="hero-tag"><i class="bi bi-star-fill"></i> #1 Educational Store</span>
+          <h1 class="hero-title">Unlock Your Potential with <span class="text-gradient">Garud Classes</span></h1>
+          <p class="hero-subtitle">Premium study materials, books, test series, and video courses designed to help you excel in your academic journey.</p>
+          <div class="hero-btns">
+            <a href="/products" class="btn btn-hero-primary"><i class="bi bi-shop me-2"></i>Shop Now</a>
+            <a href="/about" class="btn btn-hero-outline"><i class="bi bi-play-circle me-2"></i>Learn More</a>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <strong>10K+</strong>
+              <span>Students</span>
+            </div>
+            <div class="stat-item">
+              <strong>500+</strong>
+              <span>Products</span>
+            </div>
+            <div class="stat-item">
+              <strong>4.8</strong>
+              <span>Rating</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-5 d-none d-lg-block">
+        <div class="hero-illustration">
+          <div class="hero-card card-1">
+            <i class="bi bi-book-half"></i>
+            <span>Books & Notes</span>
+          </div>
+          <div class="hero-card card-2">
+            <i class="bi bi-camera-video-fill"></i>
+            <span>Video Courses</span>
+          </div>
+          <div class="hero-card card-3">
+            <i class="bi bi-clipboard-check-fill"></i>
+            <span>Test Series</span>
+          </div>
+          <div class="hero-card card-4">
+            <i class="bi bi-trophy-fill"></i>
+            <span>Top Results</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Categories Section -->
+<section class="categories-section section-padding">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="section-tag">Browse by Category</span>
+      <h2 class="section-title">What Are You Looking For?</h2>
+    </div>
+    <div class="row g-4">
+      <% const categoryIcons = { 'Books': 'bi-book-half', 'Study Material': 'bi-journal-richtext', 'Test Series': 'bi-clipboard-check', 'Video Courses': 'bi-camera-video', 'Notes': 'bi-file-earmark-text', 'Stationery': 'bi-pencil', 'Combo Packs': 'bi-box-seam', 'Other': 'bi-three-dots' }; %>
+      <% if (typeof categories !== 'undefined' && categories.length > 0) { %>
+        <% categories.forEach(cat => { %>
+          <div class="col-6 col-md-4 col-lg-3">
+            <a href="/products?category=<%= encodeURIComponent(cat) %>" class="category-card">
+              <div class="category-icon">
+                <i class="bi <%= categoryIcons[cat] || 'bi-folder' %>"></i>
+              </div>
+              <h5><%= cat %></h5>
+            </a>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <% Object.entries(categoryIcons).slice(0, 8).forEach(([cat, icon]) => { %>
+          <div class="col-6 col-md-4 col-lg-3">
+            <a href="/products?category=<%= encodeURIComponent(cat) %>" class="category-card">
+              <div class="category-icon">
+                <i class="bi <%= icon %>"></i>
+              </div>
+              <h5><%= cat %></h5>
+            </a>
+          </div>
+        <% }) %>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<!-- Featured Products -->
+<% if (typeof featuredProducts !== 'undefined' && featuredProducts.length > 0) { %>
+<section class="products-section section-padding bg-light-custom">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="section-tag">Handpicked for You</span>
+      <h2 class="section-title">Featured Products</h2>
+    </div>
+    <div class="row g-4">
+      <% featuredProducts.forEach(product => { %>
+        <div class="col-6 col-md-4 col-lg-3">
+          <%- include('partials/product-card', { product }) %>
+        </div>
+      <% }) %>
+    </div>
+    <div class="text-center mt-5">
+      <a href="/products" class="btn btn-outline-primary btn-lg">View All Products <i class="bi bi-arrow-right ms-2"></i></a>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<!-- Latest Products -->
+<% if (typeof latestProducts !== 'undefined' && latestProducts.length > 0) { %>
+<section class="products-section section-padding">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="section-tag">Just Arrived</span>
+      <h2 class="section-title">Latest Products</h2>
+    </div>
+    <div class="row g-4">
+      <% latestProducts.forEach(product => { %>
+        <div class="col-6 col-md-4 col-lg-3">
+          <%- include('partials/product-card', { product }) %>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<!-- Features Section -->
+<section class="features-section section-padding bg-light-custom">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-md-6 col-lg-3">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="bi bi-truck"></i></div>
+          <h5>Fast Delivery</h5>
+          <p>Quick delivery across India</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="bi bi-shield-check"></i></div>
+          <h5>Secure Payment</h5>
+          <p>100% secure payment via Razorpay</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="bi bi-headset"></i></div>
+          <h5>24/7 Support</h5>
+          <p>Dedicated support team</p>
+        </div>
+      </div>
+      <div class="col-md-6 col-lg-3">
+        <div class="feature-card">
+          <div class="feature-icon"><i class="bi bi-arrow-repeat"></i></div>
+          <h5>Easy Returns</h5>
+          <p>7-day return policy</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Newsletter -->
+<section class="newsletter-section section-padding">
+  <div class="container">
+    <div class="newsletter-box">
+      <div class="row align-items-center">
+        <div class="col-lg-6">
+          <h3><i class="bi bi-envelope-heart-fill me-2"></i>Stay Updated!</h3>
+          <p>Get notified about new courses, materials and special offers.</p>
+        </div>
+        <div class="col-lg-6">
+          <form class="newsletter-form">
+            <div class="input-group">
+              <input type="email" class="form-control" placeholder="Enter your email address">
+              <button class="btn btn-primary" type="button">Subscribe</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

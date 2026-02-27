@@ -1,0 +1,187 @@
+<%- include('partials/header') %>
+
+<section class="product-detail-section section-padding">
+  <div class="container">
+    <nav aria-label="breadcrumb" class="mb-4">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/">Home</a></li>
+        <li class="breadcrumb-item"><a href="/products">Products</a></li>
+        <li class="breadcrumb-item"><a href="/products?category=<%= encodeURIComponent(product.category) %>"><%= product.category %></a></li>
+        <li class="breadcrumb-item active"><%= product.name %></li>
+      </ol>
+    </nav>
+
+    <div class="row g-4 g-lg-5">
+      <!-- Product Images -->
+      <div class="col-lg-6">
+        <div class="product-gallery">
+          <div class="main-image-wrapper">
+            <% if (product.images && product.images.length > 0) { %>
+              <img src="<%= product.images[0] %>" alt="<%= product.name %>" class="main-image" id="mainImage">
+            <% } else { %>
+              <div class="product-img-placeholder-lg">
+                <i class="bi bi-image"></i>
+                <p>No image available</p>
+              </div>
+            <% } %>
+          </div>
+          <% if (product.images && product.images.length > 1) { %>
+            <div class="thumbnail-list">
+              <% product.images.forEach((img, index) => { %>
+                <div class="thumbnail-item <%= index === 0 ? 'active' : '' %>" onclick="changeImage('<%= img %>', this)">
+                  <img src="<%= img %>" alt="Thumbnail <%= index + 1 %>">
+                </div>
+              <% }) %>
+            </div>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Product Info -->
+      <div class="col-lg-6">
+        <div class="product-detail-info">
+          <span class="product-detail-category"><%= product.category %></span>
+          <h1 class="product-detail-name"><%= product.name %></h1>
+          
+          <div class="product-detail-rating">
+            <% for (let i = 1; i <= 5; i++) { %>
+              <i class="bi bi-star<%= i <= Math.round(product.ratings.average) ? '-fill' : '' %>"></i>
+            <% } %>
+            <span class="rating-text"><%= product.ratings.average %> (<%= product.ratings.count %> reviews)</span>
+          </div>
+
+          <div class="product-detail-price">
+            <% if (product.discountPrice && product.discountPrice < product.price) { %>
+              <span class="detail-price-current">&#8377;<%= product.discountPrice.toLocaleString('en-IN') %></span>
+              <span class="detail-price-original">&#8377;<%= product.price.toLocaleString('en-IN') %></span>
+              <span class="detail-discount-badge">
+                Save <%= Math.round(((product.price - product.discountPrice) / product.price) * 100) %>%
+              </span>
+            <% } else { %>
+              <span class="detail-price-current">&#8377;<%= product.price.toLocaleString('en-IN') %></span>
+            <% } %>
+          </div>
+
+          <% if (product.shortDescription) { %>
+            <p class="product-short-desc"><%= product.shortDescription %></p>
+          <% } %>
+
+          <div class="product-meta">
+            <% if (product.subject) { %>
+              <div class="meta-item">
+                <i class="bi bi-book"></i>
+                <span>Subject: <strong><%= product.subject %></strong></span>
+              </div>
+            <% } %>
+            <% if (product.classLevel) { %>
+              <div class="meta-item">
+                <i class="bi bi-mortarboard"></i>
+                <span>Class: <strong><%= product.classLevel %></strong></span>
+              </div>
+            <% } %>
+            <% if (product.author) { %>
+              <div class="meta-item">
+                <i class="bi bi-person"></i>
+                <span>Author: <strong><%= product.author %></strong></span>
+              </div>
+            <% } %>
+            <div class="meta-item">
+              <i class="bi bi-box-seam"></i>
+              <span>Stock: 
+                <strong class="<%= product.stock > 0 ? 'text-success' : 'text-danger' %>">
+                  <%= product.stock > 0 ? 'In Stock (' + product.stock + ')' : 'Out of Stock' %>
+                </strong>
+              </span>
+            </div>
+          </div>
+
+          <% if (product.stock > 0) { %>
+            <form action="/cart/add/<%= product._id %>" method="POST" class="product-detail-form">
+              <div class="quantity-selector">
+                <label>Quantity:</label>
+                <div class="qty-wrapper">
+                  <button type="button" class="qty-btn" onclick="updateQty(-1)">-</button>
+                  <input type="number" name="quantity" id="quantity" value="1" min="1" max="<%= product.stock %>" class="qty-input">
+                  <button type="button" class="qty-btn" onclick="updateQty(1)">+</button>
+                </div>
+              </div>
+              <div class="product-detail-actions">
+                <button type="submit" class="btn btn-primary btn-lg btn-add-cart-detail">
+                  <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                </button>
+              </div>
+            </form>
+          <% } else { %>
+            <div class="product-detail-actions">
+              <button class="btn btn-secondary btn-lg" disabled>
+                <i class="bi bi-x-circle me-2"></i>Out of Stock
+              </button>
+            </div>
+          <% } %>
+
+          <div class="product-guarantees">
+            <div class="guarantee-item">
+              <i class="bi bi-shield-check"></i>
+              <span>Genuine Product</span>
+            </div>
+            <div class="guarantee-item">
+              <i class="bi bi-truck"></i>
+              <span>Fast Delivery</span>
+            </div>
+            <div class="guarantee-item">
+              <i class="bi bi-arrow-repeat"></i>
+              <span>Easy Returns</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Description -->
+    <div class="product-description mt-5">
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+          <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#description">Description</button>
+        </li>
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane fade show active p-4" id="description">
+          <div class="description-content">
+            <%- product.description.replace(/\n/g, '<br>') %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related Products -->
+    <% if (typeof relatedProducts !== 'undefined' && relatedProducts.length > 0) { %>
+      <div class="related-products mt-5">
+        <h3 class="mb-4"><i class="bi bi-grid me-2"></i>Related Products</h3>
+        <div class="row g-3 g-md-4">
+          <% relatedProducts.forEach(product => { %>
+            <div class="col-6 col-md-3">
+              <%- include('partials/product-card', { product }) %>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<script>
+  function changeImage(src, el) {
+    document.getElementById('mainImage').src = src;
+    document.querySelectorAll('.thumbnail-item').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+  function updateQty(delta) {
+    const input = document.getElementById('quantity');
+    let val = parseInt(input.value) + delta;
+    if (val < 1) val = 1;
+    if (val > parseInt(input.max)) val = parseInt(input.max);
+    input.value = val;
+  }
+</script>
+
+<%- include('partials/footer') %>
