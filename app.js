@@ -76,15 +76,14 @@ app.use('/admin', adminRoutes);
 app.use('/cart', cartRoutes);
 app.use('/payment', paymentRoutes);
 
-// 404 Handler
-app.use((req, res) => {
-  res.status(404).render('404', { title: 'Page Not Found - Garud Classes' });
-});
-
-
 // ─── Health Check ──────────────────────────────────────────────────────────
 app.get('/health', (req, res) => {
   res.status(200).send('OK');
+});
+
+// 404 Handler
+app.use((req, res) => {
+  res.status(404).render('404', { title: 'Page Not Found - Garud Classes' });
 });
 
 // Error Handler
