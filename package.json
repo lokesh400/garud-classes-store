@@ -7,10 +7,15 @@
     "start": "node app.js",
     "dev": "nodemon app.js"
   },
-  "keywords": ["education", "store", "garud-classes"],
+  "keywords": [
+    "education",
+    "store",
+    "garud-classes"
+  ],
   "author": "Garud Classes",
   "license": "ISC",
   "dependencies": {
+    "axios": "^1.13.6",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^5.1.0",
     "dotenv": "^16.4.5",

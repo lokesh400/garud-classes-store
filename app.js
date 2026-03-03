@@ -7,6 +7,7 @@ const MongoStore = require('connect-mongo');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const flash = require('connect-flash');
+const axios = require('axios');
 
 const connectDB = require('./config/db');
 const User = require('./models/user');
