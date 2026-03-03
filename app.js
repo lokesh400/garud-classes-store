@@ -114,9 +114,25 @@ const createAdmin = async () => {
   }
 };
 
-// Start Server
+
+
+// ─── Health Check ──────────────────────────────────────────────────────────
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
+
+function startKeepAlive(port) {
+  setInterval(async () => {
+    const result = await axios.get(`https://store.garudclasses.com/health`, { timeout: 5000 }).catch(err => {
+      console.error('Keep-alive error:', err.message);
+      return null;
+    });
+    if (result) console.log(`🔄 Keep-alive ping → ${result.status} OK`);
+  }, 10000);
+}
+
 app.listen(PORT, () => {
-  console.log(`\n🦅 Garud Classes Store running on http://localhost:${PORT}`);
-  console.log(`📚 Environment: ${process.env.NODE_ENV || 'development'}\n`);
-  createAdmin();
+  console.log(`🚀 Garud Classes running at http://localhost:${PORT}`);
+  startKeepAlive();
 });
