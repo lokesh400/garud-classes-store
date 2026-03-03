@@ -81,6 +81,12 @@ app.use((req, res) => {
   res.status(404).render('404', { title: 'Page Not Found - Garud Classes' });
 });
 
+
+// ─── Health Check ──────────────────────────────────────────────────────────
+app.get('/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
 // Error Handler
 app.use((err, req, res, next) => {
   console.error(err.stack);
@@ -89,39 +95,6 @@ app.use((err, req, res, next) => {
     error: process.env.NODE_ENV === 'development' ? err : {}
   });
 });
-
-// Create admin user on first run
-const createAdmin = async () => {
-  try {
-    const adminExists = await User.findOne({ role: 'admin' });
-    if (!adminExists) {
-      const admin = new User({
-        fullname: 'Admin',
-        email: process.env.ADMIN_EMAIL || 'admin@garudclasses.com',
-        username: process.env.ADMIN_USERNAME || 'admin',
-        role: 'admin',
-        phone: '9876543210'
-      });
-      await User.register(admin, process.env.ADMIN_PASSWORD || 'admin123');
-      console.log('Admin user created successfully');
-      console.log('Username: ' + (process.env.ADMIN_USERNAME || 'admin'));
-      console.log('Password: ' + (process.env.ADMIN_PASSWORD || 'admin123'));
-    }
-  } catch (err) {
-    // Admin might already exist
-    if (err.name !== 'UserExistsError') {
-      console.error('Error creating admin:', err.message);
-    }
-  }
-};
-
-
-
-// ─── Health Check ──────────────────────────────────────────────────────────
-app.get('/health', (req, res) => {
-  res.status(200).send('OK');
-});
-
 
 function startKeepAlive(port) {
   setInterval(async () => {
